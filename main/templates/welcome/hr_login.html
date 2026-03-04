@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Login | danexatech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f0f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Container that prevents full-page coverage */
+        .login-card {
+            display: flex;
+            width: 980px;
+            height: 580px;
+            background: #fff;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* Image Side - Natural Color */
+        .image-side {
+            flex: 1.1;
+            position: relative;
+            background-color: #eee;
+        }
+
+        .image-side img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-side .overlay-text {
+            position: absolute;
+            bottom: 45px;
+            left: 45px;
+            color: #fff;
+            z-index: 2;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .image-side h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            line-height: 1.1;
+        }
+
+        /* Form Side */
+        .form-side {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: white;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            text-decoration: none;
+            color: #999;
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .form-header {
+            margin-top: 30px;
+            margin-bottom: 45px;
+        }
+
+        .form-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            margin-bottom: 5px;
+        }
+
+        .form-header p {
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* Form Controls & Creative Focus */
+        .form-group {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 0;
+            font-size: 15px;
+            outline: none;
+            background: transparent !important;
+        }
+
+        /* This removes the "Blue Background" on Autofill */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Creative Underline Animation */
+        .focus-border {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #000;
+            transition: 0.4s;
+        }
+
+        .form-group input:focus~.focus-border {
+            width: 100%;
+            left: 0;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: #111;
+            color: #fff;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #333;
+        }
+
+        .messages {
+            color: #d9534f;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        /* ========== PERFECT STRUCTURE: MOBILE OPTIMIZATION ========== */
+        /* ========== PERFECT STRUCTURE: MOBILE OPTIMIZATION ========== */
+        @media (max-width: 768px) {
+            body, html {
+                height: 100vh;
+                overflow: hidden; /* Locks the screen to prevent scrolling */
+                margin: 0;
+                padding: 0;
+                background-color: #fff;
+            }
+
+            .login-card {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100vh; /* Forces card to be exactly the screen height */
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            /* Image Section: Exactly 25% of the screen */
+            .image-side {
+                flex: none;
+                height: 25vh;
+                position: relative;
+            }
+
+            .image-side .overlay-text {
+                bottom: 15px;
+                left: 20px;
+            }
+
+            .image-side h1 {
+                font-size: 1.8rem !important;
+            }
+
+            /* Form Section: Exactly 75% of the screen */
+            .form-side {
+                flex: 1;
+                padding: 25px 30px;
+                display: flex;
+                flex-direction: column;
+                background: #fff;
+            }
+
+            /* Moves Back Link inside the flow (Fixes Image 5/6 alignment) */
+            .back-home {
+                position: static; 
+                display: inline-block;
+                margin-bottom: 25px;
+                font-size: 10px;
+            }
+
+            .form-header {
+                margin-top: 0;
+                margin-bottom: 20px;
+            }
+
+            .form-header h2 {
+                font-size: 2rem !important;
+            }
+
+            /* Tighter spacing for inputs */
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                font-size: 9px;
+            }
+
+            /* Anchor the button to the bottom of the screen */
+            .login-btn {
+                margin-top: auto; 
+                padding: 16px;
+                font-size: 11px;
+                letter-spacing: 2px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="image-side">
+            <img src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg" alt="HR Office">
+            <div class="overlay-text">
+                <h1>Hiring<br>Manager</h1>
+            </div>
+        </div>
+
+        <div class="form-side">
+            <a href="{% url 'index' %}" class="back-home">&lt; BACK TO HOME</a>
+
+            <div class="form-header">
+                <h2>Sign In</h2>
+                <p>HR ONLY</p>
+            </div>
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %} {{ message }} {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>HR Identification</label>
+                    <input type="text" name="username" placeholder="Full Name" required autocomplete="new-password">
+                    <span class="focus-border"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Security Code</label>
+                    <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
+                    <span class="focus-border"></span>
+                </div>
+
+                <button type="submit" class="login-btn">Enter Portal</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+{% extends 'hr/base.html' %}
+
+{% block content %}
+<style>
+    /* --- Premium Minimalist Theme (Detail View) --- */
+    :root {
+        --accent-teal: #008080;
+        --dark-charcoal: #1a1a1a;
+        --border-color: #e0e0e0;
+        --text-main: #333;
+        --text-muted: #666;
+    }
+
+    .employee-page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        font-family: 'Inter', sans-serif;
+        animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap');
+
+    /* Hero Section */
+    .hero-header {
+        width: 100%;
+        height: 30vh;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.8) 0%, rgba(31, 31, 31, 0.4) 50%, transparent 90%),
+            url('https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: flex-end;
+        padding-bottom: 20px;
+    }
+
+    .hero-header h1 {
+        color: #e7dbdb;
+        font-family: 'Playfair Display', serif;
+        font-weight: 900;
+        font-size: 2.5rem;
+        letter-spacing: -1px;
+        text-transform: uppercase;
+        margin-left: 40px;
+    }
+
+    /* Main Layout */
+    .detail-content-area {
+        max-width: 1100px;
+        width: 95%;
+        margin: 40px auto;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 50px;
+    }
+
+    /* Profile Sidebar */
+    .profile-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .profile-image-container {
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        background: #f9f9f9;
+    }
+
+    .profile-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .no-photo-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+
+    /* Data Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 40px;
+        row-gap: 25px;
+    }
+
+    .info-group {
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 8px;
+    }
+
+    .info-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .info-value {
+        font-size: 16px;
+        color: var(--text-main);
+        font-weight: 500;
+    }
+
+    /* Actions */
+    .action-footer {
+        grid-column: span 2;
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: 0.3s;
+        border-radius: 4px;
+    }
+
+    .btn-edit {
+        background: var(--dark-charcoal);
+        color: white;
+        border: none;
+    }
+
+    .btn-edit:hover {
+        background: var(--accent-teal);
+    }
+
+    .btn-back {
+        background: white;
+        color: var(--dark-charcoal);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn-back:hover {
+        background: #f5f5f5;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* --- Perfect Mobile Responsiveness --- */
+    @media (max-width: 768px) {
+
+        /* Allow the page to scroll naturally */
+        .employee-page-wrapper {
+            height: auto;
+            overflow-y: auto;
+        }
+
+        /* Shrink header height to prioritize content */
+        .hero-header {
+            height: 18vh;
+            min-height: 120px;
+        }
+
+        .hero-header h1 {
+            font-size: 1.6rem;
+            margin-left: 20px;
+            padding-bottom: 10px;
+        }
+
+        /* Stack Sidebar and Main Content */
+        .detail-content-area {
+            grid-template-columns: 1fr;
+            margin: 20px auto;
+            gap: 30px;
+            width: 90%;
+        }
+
+        /* Center and scale the profile image */
+        .profile-sidebar {
+            width: 100%;
+            max-width: 180px;
+            /* Keeps image from being too large */
+            margin: 0 auto;
+        }
+
+        /* Transform grid into a single column list */
+        .info-grid {
+            grid-template-columns: 1fr;
+            row-gap: 20px;
+        }
+
+        .info-group {
+            padding-bottom: 12px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            /* Slightly smaller for mobile screens */
+        }
+
+        /* Make buttons fill the width for easier tapping */
+        .action-footer {
+            grid-column: span 1;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            /* Larger touch target */
+        }
+    }
+</style>
+
+<div class="employee-page-wrapper">
+    <header class="hero-header">
+        <h1>Employee Profile</h1>
+    </header>
+
+    <div class="detail-content-area">
+
+        <aside class="profile-sidebar">
+            <div class="profile-image-container">
+                {% if employee.photo %}
+                <img src="{{ employee.photo.url }}" alt="{{ employee.name }}">
+                {% else %}
+                <div class="no-photo-placeholder">No Photo Available</div>
+                {% endif %}
+            </div>
+            <div style="text-align: center;">
+                <h2 style="margin: 10px 0 5px; font-family: 'Playfair Display', serif;">{{ employee.name }}</h2>
+                <span style="color: var(--accent-teal); font-weight: 700; font-size: 12px; text-transform: uppercase;">
+                    {{ employee.job_role.name }}
+                </span>
+            </div>
+        </aside>
+
+        <main class="info-grid">
+            <div class="info-group">
+                <span class="info-label">Employee ID</span>
+                <div class="info-value">#{{ employee.employee_id }}</div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Mode of Work</span>
+                <div class="info-value">{{ employee.mode_of_work }}</div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Email Address</span>
+                <div class="info-value">{{ employee.email }}</div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Phone Number</span>
+                <div class="info-value">{{ employee.phone }}</div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Location</span>
+                <div class="info-value">{{ employee.place }}</div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Date of Birth</span>
+                <div class="info-value">{{ employee.dob }}</div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Joining Date</span>
+                <div class="info-value">{{ employee.joining_date }}</div>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Monthly Salary</span>
+                <div class="info-value" style="color: #2e7d32; font-weight: 700;">₹{{ employee.salary }}</div>
+            </div>
+
+            <div class="action-footer">
+                <a href="{% url 'view_employee' %}" class="btn btn-back">Back</a>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

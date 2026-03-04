@@ -1,0 +1,592 @@
+{% extends 'hr/base.html' %}
+{% block content %}
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;600;800&display=swap"
+    rel="stylesheet">
+
+<div class="dashboard-viewport-container">
+
+    <div class="header-fixed-wrapper">
+        <div class="role-hero">
+            <img src="https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg" alt="HR Dashboard Banner">
+            <div class="hero-content">
+                <h1 class="premium-title">HR Management</h1>
+                <p id="current-date" class="premium-subtitle"></p>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="nav-container">
+                <div class="nav-left-brand">
+                    <span>DANEXATECH PRO SYSTEM</span>
+                </div>
+                <div class="nav-right-actions">
+                    <a href="{% url 'logout' %}" class="elite-logout-btn">
+                        LOGOUT <i data-lucide="log-out"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-content-scroll">
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="card-bg-overlay"></div>
+                <div class="card-inner">
+                    <div class="card-header-row">
+                        <span class="card-tag">Profile</span>
+                        <i data-lucide="user-cog" class="card-icon"></i>
+                    </div>
+                    <h3 class="classic-h3">Administrator Panel</h3>
+                    <a href="{% url 'profile' %}" class="card-link">VIEW HR PROFILE <i
+                            data-lucide="chevron-right"></i></a>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="card-bg-overlay"></div>
+                <div class="card-inner">
+                    <div class="card-header-row">
+                        <span class="card-tag">Action</span>
+                        <i data-lucide="user-plus" class="card-icon"></i>
+                    </div>
+                    <h3 class="classic-h3">Staff Management</h3>
+                    <a href="{% url 'view_employee' %}" class="card-link">ADD EMPLOYEE <i
+                            data-lucide="chevron-right"></i></a>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="card-bg-overlay"></div>
+                <div class="card-inner">
+                    <div class="card-header-row">
+                        <span class="card-tag">Live Count</span>
+                        <i data-lucide="users" class="card-icon"></i>
+                    </div>
+                    <h1 class="counter-display" data-target="{{ total_emp|default:0 }}">0</h1>
+                    <a href="{% url 'view_employee' %}" class="card-link">VIEW LIST <i
+                            data-lucide="chevron-right"></i></a>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="card-bg-overlay"></div>
+                <div class="card-inner">
+                    <div class="card-header-row">
+                        <span class="card-tag">Daily</span>
+                        <i data-lucide="calendar-check" class="card-icon"></i>
+                    </div>
+                    <h3 class="classic-h3">Attendance Status</h3>
+                    <a href="{% url 'attendance' %}" class="card-link">TRACK ATTENDANCE <i
+                            data-lucide="chevron-right"></i></a>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="card-bg-overlay"></div>
+                <div class="card-inner">
+                    <div class="card-header-row">
+                        <span class="card-tag">Broadcasts</span>
+                        <i data-lucide="megaphone" class="card-icon"></i>
+                    </div>
+                    <h1 class="counter-display" data-target="{{ total_ann|default:0 }}">0</h1>
+                    <div class="card-multi-link">
+                        <a href="{% url 'add_announcement' %}">ADD</a>
+                        <span class="dot">•</span>
+                        <a href="{% url 'view_announcement' %}">VIEW</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="card-bg-overlay"></div>
+                <div class="card-inner">
+                    <div class="card-header-row">
+                        <span class="card-tag">Structure</span>
+                        <i data-lucide="briefcase" class="card-icon"></i>
+                    </div>
+                    <h1 class="counter-display" data-target="{{ total_roles|default:0 }}">0</h1>
+                    <a href="{% url 'jobrole_summary' %}" class="card-link">VIEW ROLES <i
+                            data-lucide="chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="full-width-section">
+            <div class="section-header">
+                <i data-lucide="bar-chart-3" class="header-icon"></i>
+                <h2>DATA INSIGHTS & ANALYTICS</h2>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="salaryChart"></canvas>
+            </div>
+        </div>
+
+        <div class="full-width-section announcement-stack">
+            <div class="section-header">
+                <i data-lucide="alert-circle" class="header-icon"></i>
+                <h2>LATEST ANNOUNCEMENTS</h2>
+            </div>
+            <div class="announcement-content">
+                <ul class="elite-list">
+                    {% for ann in recent_ann %}
+                    <li>
+                        <div class="ann-item">
+                            <span class="timestamp">{{ ann.created_at|date:"M d, Y" }}</span>
+                            <div class="ann-text">
+                                <strong class="ann-title">{{ ann.title }}</strong>
+                                <p class="ann-desc">{{ ann.description|truncatewords:30 }}</p>
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="empty-state">No active system broadcasts.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chart-data" style="display:none;" data-total="{{ total_emp|default:0 }}"
+    data-present="{{ present_today|default:0 }}" data-absent="{{ absent_today|default:0 }}"></div>
+
+<style>
+    :root {
+        --elite-black: #000000;
+        --elite-grey: #444444;
+        --elite-border: #dcdcdc;
+        --elite-bg: #fdfdfd;
+        --accent-font: 'Playfair Display', serif;
+        --main-font: 'Inter', sans-serif;
+    }
+
+    body {
+        margin: 0;
+        background: var(--elite-bg);
+        font-family: var(--main-font);
+    }
+
+    .dashboard-viewport-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .dashboard-content-scroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 50px 40px;
+        background: var(--elite-bg);
+    }
+
+    /* Hero Banner */
+    .role-hero {
+        height: 200px;
+        position: relative;
+    }
+
+    .role-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.7);
+    }
+
+    .hero-content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .premium-title {
+        color: white;
+        font-family: var(--accent-font);
+        font-size: 3.5rem;
+        margin: 0;
+        letter-spacing: -1px;
+    }
+
+    .premium-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-family: var(--main-font);
+        font-size: 0.75rem;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        font-weight: 300;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+        background: white;
+        border-bottom: 1px solid var(--elite-border);
+        padding: 15px 40px;
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-left-brand {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: var(--elite-black);
+    }
+
+    .elite-logout-btn {
+        text-decoration: none;
+        color: black;
+        padding: 10px 22px;
+        border: 1.5px solid #000;
+        border-radius: 0px;
+        font-size: 10px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s;
+    }
+
+    .elite-logout-btn:hover {
+        background: #000;
+        color: #fff;
+    }
+
+    /* --- ENHANCED GLASS CARDS --- */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .metric-card {
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--elite-border);
+        min-height: 240px;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .metric-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border-color: #000;
+    }
+
+    /* Increased Blur for better text contrast */
+    .card-bg-overlay {
+        position: absolute;
+        inset: 0;
+        background: url('https://images.pexels.com/photos/2883049/pexels-photo-2883049.jpeg') center/cover no-repeat;
+        /* filter: blur(25px) brightness(1.1); */
+        /* Increased blur from 15px to 25px */
+        opacity: 0.3;
+        z-index: 1;
+        transition: 0.5s;
+    }
+
+    .metric-card:hover .card-bg-overlay {
+        opacity: 0.5;
+        filter: blur(15px);
+    }
+
+    .card-inner {
+        position: relative;
+        z-index: 2;
+        padding: 40px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-tag {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        color: #000;
+        font-weight: 800;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .card-icon {
+        width: 22px;
+        height: 22px;
+        color: #000;
+    }
+
+    .classic-h3 {
+        font-family: var(--accent-font);
+        font-style: italic;
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin: 0;
+        color: #000;
+        text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+    }
+
+    .counter-display {
+        font-family: var(--accent-font);
+        font-size: 3.8rem;
+        margin: 15px 0;
+        color: #000;
+        line-height: 1;
+    }
+
+    .card-link,
+    .card-multi-link a {
+        text-decoration: none;
+        color: black;
+        font-size: 0.75rem;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: 1.5px;
+    }
+
+    .card-link:hover {
+        text-decoration: underline;
+    }
+
+    /* --- ANNOUNCEMENTS --- */
+    .full-width-section {
+        background: white;
+        border: 1px solid var(--elite-border);
+        margin-bottom: 40px;
+    }
+
+    .section-header {
+        padding: 25px 40px;
+        border-bottom: 1px solid var(--elite-border);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .section-header h2 {
+        font-size: 0.85rem;
+        letter-spacing: 4px;
+        font-weight: 800;
+        margin: 0;
+        color: #000;
+        font-family: var(--main-font);
+    }
+
+    .ann-item {
+        display: flex;
+        gap: 50px;
+        padding: 30px 40px;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.3s;
+    }
+
+    .ann-item:hover {
+        background: #fafafa;
+    }
+
+    .timestamp {
+        font-weight: 800;
+        font-size: 0.7rem;
+        color: #888;
+        min-width: 110px;
+        font-family: var(--main-font);
+        letter-spacing: 1px;
+    }
+
+    .ann-title {
+        display: block;
+        font-family: var(--accent-font);
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+        color: #000;
+    }
+
+    .ann-desc {
+        color: #444;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        font-weight: 300;
+    }
+
+    .chart-wrapper {
+        padding: 40px;
+        height: 450px;
+    }
+
+    /* --- MOBILE OPTIMIZATION --- */
+    @media (max-width: 1100px) {
+        .metrics-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-content-scroll {
+            padding: 25px 15px;
+        }
+
+        /* Tighten spacing */
+
+        /* Adjust Hero Banner for smaller screens */
+        .role-hero {
+            height: 140px;
+        }
+
+        .premium-title {
+            font-size: 2.2rem;
+        }
+
+        .premium-subtitle {
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+        }
+
+        /* Navigation adjustments */
+        .nav-bar {
+            padding: 10px 15px;
+        }
+
+        .nav-left-brand {
+            display: none;
+        }
+
+        /* Hide brand text to save space */
+        .elite-logout-btn {
+            padding: 8px 14px;
+            font-size: 9px;
+        }
+
+        /* Card Adjustments */
+        .metrics-grid {
+            grid-template-columns: 1fr;
+            /* Stack cards vertically */
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            min-height: 180px;
+        }
+
+        .card-inner {
+            padding: 25px;
+        }
+
+        .counter-display {
+            font-size: 2.8rem;
+            margin: 5px 0;
+        }
+
+        .classic-h3 {
+            font-size: 1.2rem;
+        }
+
+        /* Charts & Announcements */
+        .chart-wrapper {
+            padding: 15px;
+            height: 300px;
+        }
+
+        .section-header {
+            padding: 15px 20px;
+        }
+
+        .section-header h2 {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+
+        .ann-item {
+            flex-direction: column;
+            /* Stack date above text */
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .timestamp {
+            min-width: auto;
+            font-size: 0.6rem;
+            opacity: 0.6;
+        }
+
+        .ann-title {
+            font-size: 1.1rem;
+        }
+
+        .ann-desc {
+            font-size: 0.85rem;
+        }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 480px) {
+        .premium-title {
+            font-size: 1.8rem;
+        }
+
+        .metric-card {
+            min-height: 160px;
+        }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    if (window.lucide) { lucide.createIcons(); }
+
+    document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    }).toUpperCase();
+
+    const counters = document.querySelectorAll('.counter-display');
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const update = () => {
+            const count = +counter.innerText;
+            const inc = target / 50;
+            if (count < target) {
+                counter.innerText = Math.ceil(count + inc);
+                setTimeout(update, 20);
+            } else { counter.innerText = target; }
+        };
+        update();
+    });
+
+    const dataEl = document.getElementById('chart-data');
+    const ctx = document.getElementById('salaryChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['TOTAL', 'PRESENT', 'ABSENT'],
+            datasets: [{
+                data: [dataEl.dataset.total, dataEl.dataset.present, dataEl.dataset.absent],
+                backgroundColor: ['#000000', '#444444', '#cccccc'],
+                barThickness: 40
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#eeeeee' }, ticks: { font: { family: 'Inter', size: 10 } } },
+                x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: 'bold', size: 10 } } }
+            }
+        }
+    });
+</script>
+{% endblock %}

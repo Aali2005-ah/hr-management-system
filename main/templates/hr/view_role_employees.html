@@ -1,0 +1,310 @@
+{% extends 'hr/base.html' %}
+
+{% block title %} {{ role }} Employees {% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-teal: #006D77;
+        --dark-teal: #004950;
+        --bg-soft: #fbfbfc;
+        --text-dark: #1A202C;
+        --text-light: #718096;
+        --border-color: #E2E8F0;
+        --header-height: 330px;
+    }
+
+    body {
+        background-color: var(--bg-soft);
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        color: var(--text-dark);
+    }
+
+    /* Fixed Header Wrapper to prevent overlap */
+    .header-fixed-wrapper {
+        position: fixed;
+        top: 0;
+        left: 200px; /* Aligns with sidebar width */
+        right: 0;
+        z-index: 100;
+        background: white;
+        height: var(--header-height);
+    }
+
+    .main-scroll-area {
+        margin-top: var(--header-height);
+        padding: 40px 20px;
+        min-height: calc(100vh - var(--header-height));
+    }
+
+    .role-hero {
+        position: relative;
+        height: 240px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+    }
+
+    .role-hero img {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover;
+        z-index: 1;
+        filter: brightness(0.4) contrast(1.1);
+    }
+
+    .hero-content { position: relative; z-index: 2; text-align: center; }
+    .hero-content h2 { 
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem; 
+        font-weight: 900; 
+        margin: 0;
+    }
+
+    .hero-content p { 
+        font-size: 0.85rem; 
+        text-transform: uppercase; 
+        letter-spacing: 5px; 
+        margin-top: 10px;
+        font-weight: 600;
+        opacity: 0.8;
+    }
+
+    .nav-bar {
+        background: white;
+        border-bottom: 1px solid var(--border-color);
+        height: 90px;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-container {
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 30px;
+    }
+
+    .back-btn {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+    }
+
+    .styled-select {
+        border: 1.5px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+        cursor: pointer;
+    }
+
+    /* Employee Strip Design */
+    .container-wide { max-width: 1100px; margin: 0 auto; }
+    .employee-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .emp-row-strip {
+        background: white;
+        border-radius: 4px;
+        padding: 18px 30px;
+        display: grid;
+        grid-template-columns: 60px 2fr 1.2fr 1.2fr;
+        align-items: center;
+        border: 1px solid var(--border-color);
+        transition: 0.3s ease;
+    }
+
+    .emp-row-strip:hover { 
+        border-color: var(--primary-teal);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+    }
+
+    .emp-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+    .emp-name-text { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin: 0; }
+    .emp-id-tag { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; }
+
+    .btn-view-details {
+        display: inline-block;
+        background-color: var(--primary-teal);
+        color: white;
+        text-decoration: none;
+        padding: 12px 25px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        transition: 0.3s;
+    }
+
+    .btn-view-details:hover { background-color: var(--dark-teal); letter-spacing: 1px; }
+
+   /* --- PERFECT MOBILE RESPONSIVE OVERRIDE --- */
+@media (max-width: 1024px) {
+    .header-fixed-wrapper { 
+        left: 0; /* Remove sidebar offset for tablets/mobile */
+    }
+}
+
+@media (max-width: 768px) {
+    .header-fixed-wrapper {
+        position: relative; /* Hero flows naturally, no more overlapping content */
+        height: auto;
+    }
+
+    .main-scroll-area {
+        margin-top: 0; /* Remove the 330px gap used for desktop fixed header */
+        padding: 20px 15px;
+    }
+
+    .role-hero {
+        height: 160px; /* Thinner hero for mobile screens */
+    }
+
+    .hero-content h2 {
+        font-size: 2rem; /* Fixes the massive 'collapsed' font look */
+        line-height: 1.2;
+    }
+
+    .hero-content p {
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+        margin-top: 5px;
+    }
+
+    .nav-bar {
+        height: auto;
+        padding: 15px 0;
+    }
+
+    .nav-container {
+        flex-direction: column; /* Stacks 'Back' and 'Filter' vertically */
+        gap: 15px;
+        padding: 0 20px;
+    }
+
+    .back-btn {
+        order: 2; /* Put the back button below the filter for better thumb reach */
+        font-size: 0.7rem;
+    }
+
+    .filter-group, 
+    .styled-select {
+        width: 100%; /* Full width dropdown for easier selection */
+    }
+
+    .emp-row-strip {
+        grid-template-columns: 50px 1fr; /* Drops into a 2-column layout */
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .mode-tag {
+        display: inline-block;
+        font-size: 0.65rem;
+        margin-top: 5px;
+    }
+
+    .action-cell {
+        grid-column: span 2; /* Forces button to a new line */
+        width: 100%;
+    }
+
+    .btn-view-details {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+    }
+}
+</style>
+
+<div class="header-fixed-wrapper">
+    <div class="role-hero">
+        {% if role|lower == "software engineer" %}
+            <img src="https://images.pexels.com/photos/16129705/pexels-photo-16129705.jpeg" alt="Software Developer">
+        {% elif "data" in role|lower %}
+            <img src="https://images.pexels.com/photos/7580704/pexels-photo-7580704.jpeg" alt="Data Analytics">
+        {% elif "hr" in role|lower %}
+            <img src="https://images.pexels.com/photos/7643735/pexels-photo-7643735.jpeg" alt="HR Executive">
+        {% elif "marketing" in role|lower %}
+            <img src="https://images.pexels.com/photos/6772103/pexels-photo-6772103.jpeg" alt="Marketing Manager">
+        {% elif "accountant" in role|lower %}
+            <img src="https://images.pexels.com/photos/6266674/pexels-photo-6266674.jpeg" alt="Accountant">
+        {% elif "ui" in role|lower or "designer" in role|lower %}
+            <img src="https://images.pexels.com/photos/2777898/pexels-photo-2777898.jpeg" alt="UI/UX Designer">
+        {% elif "backend" in role|lower %}
+            <img src="https://images.pexels.com/photos/1181243/pexels-photo-1181243.jpeg" alt="Backend Developer">
+        {% elif "frontend" in role|lower %}
+            <img src="https://images.pexels.com/photos/115655/pexels-photo-115655.jpeg" alt="Frontend Developer">
+        {% elif "project manager" in role|lower %}
+            <img src="https://images.pexels.com/photos/5324975/pexels-photo-5324975.jpeg" alt="Project Manager">
+        {% elif "business analyst" in role|lower %}
+            <img src="https://images.pexels.com/photos/3183131/pexels-photo-3183131.jpeg" alt="Business Analyst">
+        {% else %}
+            <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg" alt="Directory">
+        {% endif %}
+        
+        <div class="hero-content">
+            <h2>{{ role }}</h2>
+            <p>Professional Team Directory</p>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-container">
+            <a href="{% url 'jobrole_summary' %}" class="back-btn">&larr; BACK TO SUMMARY</a>
+            <form method="get" id="filterForm">
+                <div class="filter-group">
+                    <select name="type" class="styled-select" onchange="this.form.submit()">
+                        <option value="ALL" {% if selected_type == "ALL" %}selected{% endif %}>ALL TYPES</option>
+                        <option value="Full Time" {% if selected_type == "Full Time" %}selected{% endif %}>FULL TIME</option>
+                        <option value="Part Time" {% if selected_type == "Part Time" %}selected{% endif %}>PART TIME</option>
+                        <option value="Intern" {% if selected_type == "Intern" %}selected{% endif %}>INTERN</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="main-scroll-area">
+    <div class="container-wide">
+        <div class="employee-list">
+            {% for emp in employees %}
+            <div class="emp-row-strip">
+                <div>
+                    {% if emp.photo %}
+                        <img src="{{ emp.photo.url }}" class="emp-avatar" alt="{{ emp.name }}">
+                    {% else %}
+                        <div class="emp-avatar" style="background: #edf2f7;"></div>
+                    {% endif %}
+                </div>
+                <div>
+                    <p class="emp-name-text">{{ emp.name }}</p>
+                    <span class="emp-id-tag">Reference #{{ emp.employee_id }}</span>
+                </div>
+                <div><span class="mode-tag">{{ emp.mode_of_work }}</span></div>
+                <div class="action-cell">
+                    <a href="{% url 'employee_detail' emp.id %}" class="btn-view-details">View Details</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <h3 style="color: #cbd5e0; text-align: center; margin-top: 50px;">No Professionals Found</h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

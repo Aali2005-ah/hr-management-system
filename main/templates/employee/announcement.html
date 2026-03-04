@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements | danexatech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&family=Montserrat:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Montserrat', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            overflow: hidden;
+            /* Prevents double scrollbars */
+        }
+
+        .announcement-master {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* ========== FIXED LEFT SIDE (SHRUNK WIDTH) ========== */
+        .vintage-sidebar {
+            flex: 0 0 30%;
+            /* Fixed width at 30% */
+            position: relative;
+            height: 100vh;
+            background: #1a1a1a;
+            border-right: 1px solid #f0f0f0;
+        }
+
+        .vintage-bg-img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            filter: grayscale(0.2) contrast(1.1);
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(to bottom, rgba(26, 26, 26, 0.5), transparent);
+        }
+
+        .employee-badge-top {
+            border-left: 3px solid #008080;
+            padding-left: 15px;
+        }
+
+        .badge-label {
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            color: #008080;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .badge-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .company-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
+
+        .logo-year {
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: #008080;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .vintage-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: #cccccc;
+            font-style: italic;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        /* ========== SCROLLABLE RIGHT SIDE ========== */
+        .announcements-main {
+            flex: 1;
+            padding: 40px 80px;
+            overflow-y: auto;
+            /* Independent scrolling */
+            height: 100vh;
+            background: #ffffff;
+        }
+
+        /* Scrollbar Styling */
+        .announcements-main::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .announcements-main::-webkit-scrollbar-track {
+            background: #f9f9f9;
+        }
+
+        .announcements-main::-webkit-scrollbar-thumb {
+            background: #008080;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            position: sticky;
+            /* Keeps header visible while scrolling */
+            top: 0;
+            background: white;
+            padding: 10px 0;
+            z-index: 10;
+        }
+
+        .page-title h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: #1a1a1a;
+        }
+
+        .page-title h1 span {
+            color: #008080;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            padding: 8px 16px;
+            border: 1px solid #008080;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #008080;
+            color: #fff;
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0 20px;
+        }
+
+        .section-divider h3 {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: #008080;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #f0f0f0;
+        }
+
+        /* Cards */
+        .pinned-card,
+        .announcement-item {
+            background: #fcfcfc;
+            border-left: 4px solid #008080;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-top: 1px solid #f4f4f4;
+            border-right: 1px solid #f4f4f4;
+            border-bottom: 1px solid #f4f4f4;
+            transition: 0.3s;
+        }
+
+        .announcement-item:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .pinned-indicator {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #008080;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .pinned-dot {
+            width: 6px;
+            height: 6px;
+            background: #008080;
+            border-radius: 50%;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .card-content {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .card-meta {
+            font-size: 0.7rem;
+            color: #999;
+            display: flex;
+            gap: 20px;
+        }
+
+        .countdown {
+            background: #008080;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .countdown.expired {
+            background: #b22222;
+        }
+
+        .footer-tag {
+            padding: 40px 0;
+            text-align: center;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: #008080;
+            font-weight: 700;
+        }
+
+        /* ========== PERFECT MOBILE RESPONSIVE ========== */
+
+        @media (max-width: 1024px) {
+            .vintage-sidebar {
+                flex: 0 0 35%;
+            }
+
+            .announcements-main {
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            body,
+            html {
+                overflow: auto;
+                /* Allow the whole page to scroll */
+                height: auto;
+            }
+
+            .announcement-master {
+                flex-direction: column;
+                height: auto;
+            }
+
+            /* Top Sidebar becomes a Header Card */
+            .vintage-sidebar {
+                flex: none;
+                width: 100%;
+                height: 300px;
+            }
+
+            .sidebar-content {
+                padding: 30px;
+            }
+
+            .badge-name {
+                font-size: 1.8rem;
+            }
+
+            /* Main Content Area */
+            .announcements-main {
+                height: auto;
+                overflow: visible;
+                padding: 30px 20px;
+            }
+
+            .header-section {
+                position: relative;
+                /* Unstick for better mobile flow */
+                margin-bottom: 30px;
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+
+            /* Card Adjustments */
+            .pinned-card,
+            .announcement-item {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+            }
+
+            .card-meta {
+                flex-direction: column;
+                /* Stack date and time on very small screens */
+                gap: 8px;
+            }
+
+            .section-divider h3 {
+                font-size: 0.6rem;
+                letter-spacing: 2px;
+            }
+        }
+
+        /* Fix for ultra-small phones */
+        @media (max-width: 400px) {
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="announcement-master">
+        <div class="vintage-sidebar">
+            <img class="vintage-bg-img" src="https://images.pexels.com/photos/3201696/pexels-photo-3201696.jpeg"
+                alt="heritage workspace">
+
+            <div class="sidebar-content">
+                <div class="employee-badge-top">
+                    <div class="badge-label">LOGGED AS</div>
+                    <div class="badge-name">{{ employee_name }}</div>
+                </div>
+
+                <div>
+                    <div class="company-logo">danexatech</div>
+                    <div class="logo-year">EST. 1923</div>
+                    <div class="vintage-quote">
+                        "Precision and heritage in workforce technology."
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="announcements-main">
+            <div class="header-section">
+                <div class="page-title">
+                    <h1>bulletins<span>·</span></h1>
+                </div>
+                <a href="{% url 'employee_login' %}" class="logout-btn">
+                    <i class="fa-solid fa-power-off"></i> Sign out
+                </a>
+            </div>
+
+            {% if announcements %}
+            {% for announcement in announcements %}
+            {% if announcement.permanent %}
+            <div class="section-divider">
+                <h3>IMPORTANT</h3>
+                <span class="divider-line"></span>
+            </div>
+
+            <div class="pinned-card">
+                <div class="pinned-indicator">
+                    <span class="pinned-dot"></span> Official Notice
+                </div>
+                <h4 class="card-title">{{ announcement.title }}</h4>
+                <div class="card-content">{{ announcement.content }}</div>
+                <div class="card-meta">
+                    <span><i class="fa-solid fa-calendar-check"></i> {{ announcement.created_at|date:"M j, Y" }}</span>
+                    <span><i class="fa-solid fa-thumbtack"></i> Pinned</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            <div class="section-divider">
+                <h3>LATEST</h3>
+                <span class="divider-line"></span>
+            </div>
+
+            {% for announcement in announcements %}
+            {% if not announcement.permanent %}
+            <div class="announcement-item">
+                <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                    <span class="badge-label" style="font-size: 0.5rem; color: #999;">TIME REMAINING:</span>
+                    <span class="countdown" data-expiry="{{ announcement.display_until|date:'Y-m-d H:i:s' }}"></span>
+                </div>
+                <h4 class="card-title">{{ announcement.title }}</h4>
+                <div class="card-content">{{ announcement.content }}</div>
+                <div class="card-meta">
+                    <span><i class="fa-solid fa-clock"></i> {{ announcement.created_at|date:"g:i a" }}</span>
+                    <span><i class="fa-solid fa-calendar"></i> {{ announcement.created_at|date:"M j" }}</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            {% else %}
+            <div style="text-align:center; padding: 100px 0; color: #999;">
+                <i class="fa-solid fa-folder-open" style="font-size: 2rem; color: #008080; margin-bottom: 15px;"></i>
+                <p style="font-family: 'Cormorant Garamond'; font-size: 1.2rem;">The bulletin board is currently empty.
+                </p>
+            </div>
+            {% endif %}
+
+            <div class="footer-tag">DANEXATECH · CHENNAI · EST. 1923</div>
+        </div>
+    </div>
+
+    <script>
+        function updateCountdowns() {
+            document.querySelectorAll(".countdown").forEach(function (el) {
+                var expiry = new Date(el.getAttribute("data-expiry")).getTime();
+                var now = new Date().getTime();
+                var diff = expiry - now;
+
+                if (diff <= 0) {
+                    el.innerHTML = "Expired";
+                    el.classList.add("expired");
+                    return;
+                }
+
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                el.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+            });
+        }
+        setInterval(updateCountdowns, 1000);
+        updateCountdowns();
+    </script>
+
+</body>
+
+</html>

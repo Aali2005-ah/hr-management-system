@@ -1,0 +1,321 @@
+{% extends 'hr/base.html' %}
+{% block content %}
+
+<style>
+    /* Clean Modern Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&family=Lato:wght@300;400&display=swap');
+
+    :root {
+        --text-main: #2d3436;
+        --text-sub: #636e72;
+        --border-soft: #dfe6e9;
+        --bg-body: #f9fbfc;
+        --accent-teal: #007079;
+    }
+
+    body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+    }
+
+    .attendance-container {
+        font-family: 'Inter', sans-serif;
+        max-width: 950px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    /* Refined Header */
+    .header-section {
+        position: fixed;
+        top: 0;
+        left: 250px;
+        /* Sidebar width adjustment */
+        right: 0;
+        height: 200px;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 5%;
+        color: white;
+        background: url('https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg') no-repeat center center;
+        background-size: cover;
+    }
+
+    .header-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
+        z-index: 1;
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .header-section h2 {
+        margin: 0;
+        font-family: var(--font-heading);
+        font-size: 2.8rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    form{
+        margin-top: 250px;
+    }
+
+    /* Unique Role Divider */
+    .role-divider {
+        display: flex;
+        align-items: center;
+        margin: 50px 0 25px 0;
+    }
+
+    .role-divider span {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 0.85rem;
+        color: var(--accent-teal);
+        padding-right: 20px;
+        white-space: nowrap;
+    }
+
+    .role-divider::after {
+        content: "";
+        height: 1px;
+        flex-grow: 1;
+        background: linear-gradient(to right, var(--accent-teal), transparent);
+        opacity: 0.3;
+    }
+
+    /* Slim Card Design */
+    .employee-row {
+        background: #ffffff;
+        border: 1px solid var(--border-soft);
+        border-radius: 4px;
+        padding: 12px 25px;
+        /* Reduced height */
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+    }
+
+    .employee-row:hover {
+        border-color: var(--accent-teal);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Components */
+    .check-wrapper {
+        margin-right: 20px;
+    }
+
+    .check-wrapper input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--accent-teal);
+    }
+
+    .emp-img {
+        width: 45px;
+        /* Reduced size */
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+        background-color: #f0f0f0;
+    }
+
+    .emp-info {
+        flex: 1;
+    }
+
+    .emp-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.15rem;
+        color: var(--text-main);
+        margin: 0;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .emp-meta {
+        font-family: 'Lato', sans-serif;
+        font-size: 0.75rem;
+        color: var(--text-sub);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .emp-work-mode {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        color: var(--text-sub);
+        font-weight: 400;
+        padding-left: 20px;
+        border-left: 1px solid var(--border-soft);
+    }
+
+    .submit-area {
+        margin-top: 50px;
+        text-align: right;
+    }
+
+    .btn-submit-log {
+        background-color: var(--text-main);
+        color: #fff;
+        border: none;
+        padding: 12px 35px;
+        border-radius: 3px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-submit-log:hover {
+        background-color: var(--accent-teal);
+        transform: translateY(-1px);
+    }
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .attendance-container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    /* Reset Fixed Header for Mobile */
+    .header-section {
+        position: relative; /* Unstick from top */
+        left: 0;            /* Remove sidebar offset */
+        height: 150px;
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: -220px; /* Pull the form back up since we removed position:fixed */
+    }
+
+    .header-section h2 {
+        font-size: 1.8rem;
+    }
+
+    form {
+        margin-top: 240px; /* Adjust spacing since header is now relative */
+    }
+
+    /* Stack Employee Row elements */
+    .employee-row {
+        padding: 15px;
+        flex-wrap: wrap; /* Allow wrapping for small screens */
+    }
+
+    .emp-info {
+        flex: 1;
+        min-width: 120px; /* Ensure name doesn't get crushed */
+    }
+
+    .emp-name {
+        font-size: 1rem;
+    }
+
+    /* Move work mode to its own line or make it more compact */
+    .emp-work-mode {
+        width: 100%;
+        margin-top: 10px;
+        padding-left: 0;
+        padding-top: 8px;
+        border-left: none;
+        border-top: 1px solid var(--border-soft);
+        font-size: 0.8rem;
+        text-align: right;
+    }
+
+    .role-divider {
+        margin: 30px 0 15px 0;
+    }
+
+    .role-divider span {
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+    }
+
+    .submit-area {
+        text-align: center; /* Center button on mobile for better thumb reach */
+    }
+
+    .btn-submit-log {
+        width: 100%; /* Full width button for easier tapping */
+        padding: 15px;
+    }
+}
+
+</style>
+
+<div class="attendance-container">
+
+    <div class="header-section">
+        <div class="header-content">
+            <h2>Daily Attendance</h2>
+            <span style="font-weight: 300; opacity: 0.9; font-size: 0.9rem; letter-spacing: 2px;">{{ today }}</span>
+        </div>
+    </div>
+
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for role, employees in role_data.items %}
+
+        <div class="role-divider">
+            <span>{{ role.name }}</span>
+        </div>
+
+        {% if employees %}
+        {% for emp in employees %}
+        <div class="employee-row">
+            <div class="check-wrapper">
+                <input type="checkbox" name="status_{{ emp.id }}">
+            </div>
+
+            {% if emp.photo %}
+            <img src="{{ emp.photo.url }}" class="emp-img" alt="{{ emp.name }}">
+            {% else %}
+            <div class="emp-img"
+                style="display: flex; align-items: center; justify-content: center; font-size: 8px; color: #ccc;">N/A
+            </div>
+            {% endif %}
+
+            <div class="emp-info">
+                <span class="emp-name">{{ emp.name }}</span>
+                <span class="emp-meta">ID: {{ emp.employee_id }}</span>
+            </div>
+
+            <div class="emp-work-mode">
+                {{ emp.mode_of_work }}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div style="padding: 15px; font-size: 0.85rem; color: #b2bec3; font-style: italic;">
+            No employees currently assigned.
+        </div>
+        {% endif %}
+
+        {% endfor %}
+
+        <div class="submit-area">
+            <button type="submit" class="btn-submit-log">SAVE ATTENDANCE</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

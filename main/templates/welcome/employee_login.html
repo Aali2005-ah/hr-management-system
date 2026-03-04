@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Login | danexatech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ========== CLASSIC PAGE SETUP ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #eeeef4;
+            background-image: radial-gradient(#d1d1d1 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .login-card {
+            display: flex;
+            width: 1000px;
+            max-width: 100%;
+            height: 650px;
+            background: #ffffff;
+            border-radius: 2px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid #e0dcd8;
+            position: relative;
+        }
+
+        .nav-container {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #7a7a7a;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        .image-panel {
+            flex: 1.1;
+            position: relative;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+
+        .image-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            filter: contrast(1.1) grayscale(20%);
+        }
+
+        .image-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.4));
+        }
+
+        .image-caption {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            right: 40px;
+            color: #fff;
+            z-index: 5;
+        }
+
+        .image-caption h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            line-height: 1.2;
+        }
+
+        .form-panel {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .form-header {
+            margin-bottom: 40px;
+        }
+
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            font-size: 0.9rem;
+            color: #888;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .input-box {
+            position: relative;
+            border-bottom: 1.5px solid #e0e0e0;
+            transition: 0.3s;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-box input:focus {
+            outline: none;
+        }
+
+        .input-box::after {
+            content: '';
+            position: absolute;
+            bottom: -1.5px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: #1a1a1a;
+            transition: 0.4s ease;
+        }
+
+        .input-box:focus-within::after {
+            width: 100%;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #333;
+            letter-spacing: 4px;
+        }
+
+        .error-box {
+            font-size: 0.85rem;
+            color: #bc2f32;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f8d7da;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ========== PERFECT MOBILE RESPONSIVE ========== */
+        @media (max-width: 1000px) {
+            body {
+                padding: 10px;
+                height: auto;
+                min-height: 100vh;
+                display: flex;
+                /* Changed back to flex to center the card */
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .login-card {
+                flex-direction: column;
+                height: auto;
+                width: 100%;
+                max-width: 450px;
+                margin: 40px auto 20px;
+                position: relative;
+                /* Ensure container is reference for link */
+            }
+
+            /* New styling to make the Go Back button look like a floating header on mobile */
+            .nav-container {
+                position: relative;
+                /* Remove absolute positioning */
+                top: 0;
+                right: 0;
+                width: 100%;
+                background: #fff;
+                padding: 15px 20px;
+                border-bottom: 1px solid #eee;
+                z-index: 20;
+            }
+
+            .back-link {
+                color: #1a1a1a;
+                font-weight: 700;
+                background: none;
+                padding: 0;
+                display: inline-flex;
+            }
+
+            .image-panel {
+                flex: none;
+                height: 180px;
+            }
+
+            .image-caption h2 {
+                font-size: 1.6rem;
+            }
+
+            .form-panel {
+                padding: 30px 25px;
+                flex: none;
+            }
+
+            .form-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Fix for very small screens */
+        @media (max-width: 380px) {
+            .nav-container {
+                padding: 12px 15px;
+            }
+
+            .image-panel {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="nav-container">
+            <a href="{% url 'index' %}" class="back-link">
+                <i class="fa-solid fa-chevron-left"></i> Back to Home
+            </a>
+        </div>
+
+        <div class="image-panel">
+            <img src="https://images.pexels.com/photos/140945/pexels-photo-140945.jpeg" alt="Collaborative Meeting">
+            <div class="image-caption">
+                <h2>Shared<br>Intelligence.</h2>
+            </div>
+        </div>
+
+        <div class="form-panel">
+            <div class="form-header">
+                <h1>Sign In</h1>
+                <p>Authorized personnel only</p>
+            </div>
+
+            {% if error %}
+            <div class="error-box">
+                <i class="fa-solid fa-circle-info"></i> {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="name">Employee Identification</label>
+                    <div class="input-box">
+                        <input type="text" id="name" name="name" placeholder="Full Name" required
+                            autocomplete="new-password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Security Code</label>
+                    <div class="input-box">
+                        <input type="password" id="password" name="password" placeholder="Password" required
+                            autocomplete="new-password">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Enter Portal</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

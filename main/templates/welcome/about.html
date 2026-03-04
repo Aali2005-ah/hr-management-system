@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Heritage & Influence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: #eeeef4;
+            /* Matches Login Background */
+            color: #1a1a1a;
+            scroll-behavior: smooth;
+        }
+
+        .about-master {
+            height: 100vh;
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ---------- NAVIGATION (Updated to match Login style) ---------- */
+        nav {
+            position: absolute;
+            top: 50px;
+            left: 950px;
+            display: flex;
+            gap: 30px;
+            z-index: 100;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #2f4156;
+            transition: 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+
+        /* ---------- MAIN STORY GRID ---------- */
+        .story-grid {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            position: relative;
+        }
+
+        /* LEFT SIDE */
+        .left-story {
+            flex: 1.1;
+            padding: 20px 40px 40px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #ffffff;
+            position: relative;
+            z-index: 5;
+        }
+
+        .chapter {
+            max-width: 550px;
+        }
+
+        .chapter .year-mark {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #0d9488;
+            /* Teal Accent */
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+
+        .chapter h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+        }
+
+        .chapter h2 span {
+            font-style: italic;
+            color: #0d9488;
+            font-weight: 500;
+        }
+
+        .story-paragraph {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+            font-weight: 400;
+            border-left: 2px solid #1a1a1a;
+            padding-left: 24px;
+        }
+
+        /* PHOTO COLLAGE */
+        .memory-grid {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .memory-item {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 2px;
+            filter: grayscale(100%);
+            /* Classic Monochrome */
+            border: 1px solid #e0e0e0;
+            transition: 0.5s ease;
+        }
+
+        .memory-item:hover {
+            transform: translateY(-5px);
+            filter: grayscale(0%);
+            border-color: #0d9488;
+        }
+
+        /* RIGHT SIDE: Achievement Cards */
+        .right-cards {
+            flex: 1.2;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            /* Dark Classic Side */
+            z-index: 2;
+        }
+
+        /* Background overlay to match Login panel */
+        .right-cards::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.pexels.com/photos/7096/people-woman-coffee-meeting.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: grayscale(1);
+        }
+
+        .card-stack {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            margin-top: 40px;
+        }
+
+        .achievement-card {
+            position: absolute;
+            width: 320px;
+            min-height: 200px;
+            background: #ffffff;
+            border-radius: 2px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: default;
+            border-left: 6px solid #0d9488;
+        }
+
+        /* overlapping positions */
+        .card-1 {
+            top: 0;
+            left: 0;
+            z-index: 10;
+            transform: rotate(-2deg);
+        }
+
+        .card-2 {
+            top: 90px;
+            left: 50px;
+            z-index: 20;
+            transform: rotate(1deg);
+        }
+
+        .card-3 {
+            top: 180px;
+            left: 20px;
+            z-index: 30;
+            transform: rotate(3deg);
+        }
+
+        .card-4 {
+            top: 270px;
+            left: 70px;
+            z-index: 40;
+            transform: rotate(-1deg);
+        }
+
+        .achievement-card:hover {
+            transform: rotate(0deg) scale(1.05) translateY(-10px);
+            z-index: 100;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-year {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #0d9488;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+
+        .card-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+            line-height: 1.5;
+        }
+
+        .signature {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-top: 40px;
+            color: #888;
+            border-bottom: 1px solid #eee;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        /* Mobile adjustments */
+        /* ================= MOBILE RESPONSIVE ================= */
+
+        @media (max-width: 1100px) {
+
+            /* Reset layout for vertical scrolling */
+            .about-master {
+                height: auto;
+                overflow-y: visible;
+            }
+
+            .story-grid {
+                flex-direction: column;
+                height: auto;
+            }
+
+            /* Fix Navigation: Center and stack links without breaking */
+            nav {
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 30px 15px;
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 12px;
+                background: #ffffff;
+                /* Contrast against the dark background of other pages */
+                color: transparent;
+                /* Hides the "|" separators on mobile */
+            }
+
+            nav a {
+                font-size: 0.7rem;
+                color: #1a1a1a;
+                letter-spacing: 1px;
+            }
+
+            /* Left Story Section */
+            .left-story {
+                padding: 40px 20px;
+                text-align: center;
+                align-items: center;
+            }
+
+            .chapter {
+                max-width: 100%;
+            }
+
+            /* Scale down large heading for mobile screens */
+            .chapter h2 {
+                font-size: clamp(2.2rem, 10vw, 3rem);
+                line-height: 1.2;
+            }
+
+            .story-paragraph {
+                border-left: none;
+                border-top: 2px solid #1a1a1a;
+                padding-left: 0;
+                padding-top: 20px;
+                font-size: 1rem;
+            }
+
+            .memory-grid {
+                justify-content: center;
+            }
+
+            .memory-item {
+                width: calc(50% - 15px);
+                /* Two images per row on mobile */
+                height: 140px;
+            }
+
+            /* Right Achievement Cards Section */
+            .right-cards {
+                padding: 60px 20px;
+                flex: none;
+            }
+
+            .card-stack {
+                width: 100%;
+                height: auto;
+                /* Allow cards to stack vertically */
+                margin-top: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            /* Remove rotations and fixed positioning for a "Neat" list */
+            .achievement-card {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                transform: none !important;
+                width: 100%;
+                max-width: 400px;
+                min-height: auto;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            .achievement-card:hover {
+                transform: translateY(-5px) !important;
+            }
+
+            .card-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 1100px) {
+
+            /* Ensure body doesn't cause horizontal scroll */
+            body,
+            html {
+                overflow-x: hidden;
+                height: auto;
+            }
+
+            .master-container,
+            .about-master {
+                height: auto;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            /* NAVIGATION: Force everything into 1 line */
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 30px 5px;
+                /* Minimal padding to maximize width */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                /* Reduced gap to fit all items */
+                /* background: transparent; */
+                color: transparent;
+                /* Hides the "|" separators */
+                flex-wrap: nowrap;
+                /* Forces items to stay in one line */
+            }
+
+            nav a {
+                font-size: 9px;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+                padding: 5px 2px;
+                color: #2f4156;
+            }
+
+            h1 {
+                font-size: 10vw;
+                flex-direction: column;
+                align-items: center;
+                line-height: 1.1;
+                letter-spacing: -1px;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .story-grid{
+                margin-top: 80px;
+            }
+
+            .chapter h2 {
+                font-size: 8vw;
+                line-height: 1.1;
+                text-align: center;
+            }
+
+            /* Layout Sections */
+            .content-section,
+            .left-story {
+                flex: none;
+                width: 100%;
+                padding: 20px 15px 40px 15px;
+                text-align: center;
+                align-items: center;
+                clip-path: none;
+            }
+
+            .content-section::after {
+                display: none;
+            }
+
+            /* Achievement Cards: Stack vertically for neatness */
+            .card-stack {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .achievement-card {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                transform: none !important;
+                width: 100%;
+                max-width: 350px;
+            }
+
+            /* Buttons */
+            .action-area {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 90%;
+                max-width: 280px;
+                padding: 15px 0;
+            }
+
+            /* Image area */
+            .image-section {
+                height: 30vh;
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+
+        .about-master::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .about-master::-webkit-scrollbar-thumb {
+            background: #0d9488;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="about-master">
+        <nav>
+            <a href="{% url 'index' %}">Home</a> |
+            <a href="{% url 'about' %}">About</a> |
+            <a href="{% url 'contact' %}">Contact</a> |
+            <a href="{% url 'employee_login' %}">Announcement</a>
+        </nav>
+
+        <div class="story-grid">
+            <div class="left-story">
+                <div class="chapter">
+                    <div class="year-mark">Est. 1923 — A Century of Excellence</div>
+                    <h2>Crafting <span>the workforce</span> heritage</h2>
+                    <div class="story-paragraph">
+                        WorkforcePro helps organizations manage their workforce in a smarter and simpler way.
+                        We focus on creating efficient systems that support both businesses and employees.
+                        By combining practical solutions with modern technology, we make workforce management easy,
+                        transparent, and effective. At WorkforcePro, people and progress go hand in hand.
+                    </div>
+                </div>
+                <div class="memory-grid">
+                    <img class="memory-item"
+                        src="https://plus.unsplash.com/premium_photo-1664392373164-5aae3dbc7ea3?w=600"
+                        alt="vintage office">
+                    <img class="memory-item"
+                        src="https://plus.unsplash.com/premium_photo-1664392226736-60f18bfbfdf5?w=600"
+                        alt="factory workers">
+                    <img class="memory-item"
+                        src="https://plus.unsplash.com/premium_photo-1664392160808-3744415a6ceb?w=600"
+                        alt="retro telephone">
+                    <img class="memory-item" src="https://images.unsplash.com/photo-1726312350238-6544d136fb27?q=80"
+                        alt="team meeting">
+                </div>
+                <div class="signature">— Preserving the human element</div>
+            </div>
+
+            <div class="right-cards">
+                <div class="card-stack">
+                    <div class="achievement-card card-1">
+                        <div class="card-year">1956 AWARD</div>
+                        <div class="card-title">First to Guarantee <br>Pension Welfare</div>
+                        <div class="card-desc">Before it became law, we protected 1,200+ workers with retirement plans.
+                        </div>
+                    </div>
+                    <div class="achievement-card card-2">
+                        <div class="card-year">1973 MILESTONE</div>
+                        <div class="card-title">Diversity Charter</div>
+                        <div class="card-desc">Signed the first cross‑industry equal opportunity manifesto.</div>
+                    </div>
+                    <div class="achievement-card card-3">
+                        <div class="card-year">1992 INNOVATION</div>
+                        <div class="card-title">Employee‑Owned <br>Trust Model</div>
+                        <div class="card-desc">Pioneered ESOP before it became a global movement.</div>
+                    </div>
+                    <div class="achievement-card card-4">
+                        <div class="card-year">2024 LEGACY</div>
+                        <div class="card-title">50k Lives <br>Transformed</div>
+                        <div class="card-desc">Through ethical placement & continuous upskilling.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

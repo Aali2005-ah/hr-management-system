@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workforce Pro | Elite</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Montserrat:wght@300;400;700;800;900&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            background: #f5efeb;
+            overflow: hidden;
+            color: #2f4156;
+        }
+
+        /* ================= LAYOUT ================= */
+
+        .master-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            background: #dae4ee;
+            position: relative;
+        }
+
+        .content-section {
+            /* Reduced flex from 1.3 to 1.1 to give right side more width */
+            flex: 1.1;
+            padding: 50px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffffff 0%, #dae4ee 100%);
+            position: relative;
+            z-index: 3;
+            clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+        }
+
+        /* Updated this section to create the black divider gap */
+        .content-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 2px;
+            /* Adjusted to sit perfectly in the gap */
+            width: 100px;
+            height: 100%;
+            background: #000000;
+            /* Changed to black */
+            transform: skewX(-11deg);
+            z-index: -1;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+        }
+
+        nav {
+            position: absolute;
+            top: 50px;
+            left: 950px;
+            display: flex;
+            gap: 30px;
+            z-index: 100;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #2f4156;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #2f4156;
+            transition: 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero-text {
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: clamp(3.5rem, 7vw, 6.2rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -4px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .workforce-part {
+            color: #2f4156;
+        }
+
+        .highlight {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 700;
+            color: #567c8d;
+            margin-left: 15px;
+            letter-spacing: 0;
+        }
+
+        .sub-headline {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            max-width: 480px;
+            color: #567c8d;
+            line-height: 1.8;
+            margin-bottom: 60px;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .action-area {
+            display: flex;
+            gap: 30px;
+        }
+
+        .btn {
+            padding: 20px 40px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+        }
+
+        .btn-hr {
+            background: #2f4156;
+            color: white;
+            box-shadow: 0 15px 35px rgba(47, 65, 86, 0.25);
+        }
+
+        .btn-emp {
+            background: transparent;
+            color: #2f4156;
+            border: 1px solid #2f4156;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(47, 65, 86, 0.3);
+        }
+
+        /* ================= IMAGE SECTION ================= */
+
+        .image-section {
+            /* Increased flex to 1.2 so the right side is more prominent */
+            flex: 1.2;
+            position: relative;
+            overflow: hidden;
+            margin-left: -10%;
+            /* Slight overlap for seamlessness */
+            z-index: 1;
+        }
+
+        .bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 10s ease-out;
+        }
+
+        .image-section:hover .bg-img {
+            transform: scale(1.1);
+        }
+
+        /* Overlay with a classy vignette */
+        .image-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(75deg, rgba(245, 239, 235, 0.4) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* ================= MOBILE RESPONSIVE ================= */
+        /* ================= MOBILE RESPONSIVE ================= */
+
+        /* ================= MOBILE RESPONSIVE ================= */
+
+        @media (max-width: 1100px) {
+
+            /* Prevent horizontal scrolling and reset height */
+            body,
+            html {
+                overflow-x: hidden;
+                height: auto;
+            }
+
+            .master-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            /* Navigation: Center and hide the pipes to save space */
+            nav {
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 40px 10px 10px 10px;
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 12px;
+                background: transparent;
+                /* This hides the "|" separators while keeping the links visible */
+                color: transparent;
+            }
+
+            nav a {
+                font-size: 10px;
+                letter-spacing: 1px;
+                color: #2f4156;
+                text-decoration: none;
+            }
+
+            /* Content Section: Remove slant and force centering */
+            .content-section {
+                flex: none;
+                width: 100%;
+                padding: 30px 15px 50px 15px;
+                text-align: center;
+                clip-path: none;
+                background: transparent;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .content-section::after {
+                display: none;
+            }
+
+            /* Headline: Force "DANEXATECH" to stay within screen bounds */
+            h1 {
+                /* vw (viewport width) ensures it scales perfectly with the screen */
+                font-size: 11vw;
+                flex-direction: column;
+                align-items: center;
+                line-height: 1;
+                /* Tighter tracking prevents the long word from breaking the layout */
+                letter-spacing: -1.5px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .workforce-part {
+                display: block;
+                width: 100%;
+                word-wrap: break-word;
+            }
+
+            .highlight {
+                font-size: 9vw;
+                margin-left: 0;
+                margin-top: 5px;
+                display: block;
+            }
+
+            /* Sub-headline: Tighten for small screens */
+            .sub-headline {
+                margin: 15px auto 35px auto;
+                font-size: 0.85rem;
+                line-height: 1.5;
+                width: 90%;
+                max-width: 320px;
+            }
+
+            /* Buttons: Full width for ease of use */
+            .action-area {
+                flex-direction: column;
+                width: 100%;
+                gap: 12px;
+                align-items: center;
+            }
+
+            .btn {
+                width: 90%;
+                max-width: 280px;
+                padding: 16px 0;
+                font-size: 0.75rem;
+                display: block;
+            }
+
+            /* Image Section: Placed neatly at the bottom */
+            .image-section {
+                flex: none;
+                height: 35vh;
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="master-container">
+        <nav>
+            <a href="{% url 'index' %}">Home</a> |
+            <a href="{% url 'about' %}">About</a> |
+            <a href="{% url 'contact' %}">Contact</a> |
+            <a href="{% url 'employee_login' %}">Announcement</a>
+        </nav>
+        <section class="content-section">
+
+
+            <div class="hero-text">
+                <h1>
+                    <span class="workforce-part">DANEXATECH</span>
+                    <span class="highlight">PRO</span>
+                </h1>
+                <p class="sub-headline">
+                    Managing your greatest assets with precision.
+                    A sophisticated workspace for the modern professional.
+                </p>
+                <div class="action-area">
+                    <a href="{% url 'hr_login' %}" class="btn btn-hr">HR LOGIN</a>
+                    <a href="{% url 'employee_login' %}" class="btn btn-emp">EMPLOYEE LOGIN</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="image-section">
+            <img src="https://plus.unsplash.com/premium_photo-1760612413651-3ac82e7d3bbe?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                class="bg-img" />
+        </section>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{% extends 'hr/base.html' %}
+{% block content %}
+
+<div style="height: 80vh; display: flex; justify-content: center; align-items: center; background: #f4f7f6;">
+    <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; max-width: 450px; width: 90%;">
+        <div style="color: #e63946; font-size: 50px; margin-bottom: 20px;">⚠️</div>
+        <h2 style="margin: 0 0 10px 0; color: #333;">Delete Employee</h2>
+        <p style="color: #666; line-height: 1.5;">You are about to permanently remove <strong>{{ employee.name }}</strong>. This action cannot be undone.</p>
+        
+        <form method="POST" style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px;">
+            {% csrf_token %}
+            <button type="submit" style="background: #e63946; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase;">
+                Confirm Deletion
+            </button>
+            <a href="{% url 'view_employee' %}" style="text-decoration: none; color: #666; font-size: 0.9rem; padding: 10px;">
+                Cancel and Go Back
+            </a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

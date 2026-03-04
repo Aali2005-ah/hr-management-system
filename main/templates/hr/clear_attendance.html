@@ -1,0 +1,287 @@
+{% extends 'hr/base.html' %}
+{% block content %}
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+<style>
+    :root {
+        --text-main: #1a1a1a;
+        --text-sub: #7f8c8d;
+        --accent-teal: #007079;
+        --danger-red: #d63031;
+        --bg-body: #f4f7f6;
+        --card-white: #ffffff;
+        --border-soft: rgba(0, 0, 0, 0.05);
+        --sidebar-width: 250px;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background-color: var(--bg-body);
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* --- Cinematic Hero Header (Background) --- */
+    .hero-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 30vh;
+        /* Taller background like the image */
+        z-index: 1;
+        background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8)),
+            url('https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* --- Centered Premium Wrapper --- */
+    .premium-wrapper {
+        margin-left: var(--sidebar-width);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* --- Centered Card (Matches Image Example) --- */
+    .form-side {
+        background: var(--card-white);
+        width: 100%;
+        max-width: 500px;
+        padding: 80px 60px;
+        border-radius: 2px;
+        /* Sharp architectural edges */
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        margin-left: -300px;
+    }
+
+    @keyframes reveal {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Success Icon Styling */
+    .status-icon {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        background-color: #f0f4f4;
+        border-radius: 50%;
+        margin: 0 auto 40px;
+        color: var(--accent-teal);
+        font-size: 1rem;
+    }
+
+    /* Heading Styling */
+    .form-side h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.4rem;
+        line-height: 1.2;
+        color: var(--text-main);
+        margin: 0 0 25px 0;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .form-side p {
+        color: var(--text-sub);
+        font-size: 0.95rem;
+        line-height: 1.8;
+        margin-bottom: 45px;
+        font-weight: 400;
+        padding: 0 10px;
+    }
+
+    /* Inputs & Buttons */
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .input-wrapper input {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid #e0e0e0;
+        background: transparent;
+        padding: 12px 0;
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        outline: none;
+        transition: all 0.4s;
+        color: var(--text-main);
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .input-wrapper input:focus {
+        border-bottom-color: var(--text-main);
+    }
+
+    .btn-action {
+        width: 100%;
+        background-color: #1a1a1a;
+        /* Solid Black */
+        color: white;
+        border: none;
+        padding: 22px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 4px;
+        /* Wide spacing like image */
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .btn-action:hover {
+        background-color: #333;
+        transform: translateY(-2px);
+    }
+
+    .back-nav {
+        margin-top: 35px;
+        display: inline-block;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--text-sub);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .back-nav:hover {
+        color: var(--text-main);
+        letter-spacing: 3px;
+    }
+
+    .alert-premium {
+        font-size: 0.75rem;
+        color: var(--danger-red);
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* --- Perfect Mobile Responsive --- */
+    @media (max-width: 768px) {
+
+        /* Allow scrolling on small screens if the form is tall */
+        html,
+        body {
+            overflow-y: auto;
+        }
+
+        /* 1. Reset Sidebar & Margin Offsets */
+        .premium-wrapper {
+            margin-left: 0 !important;
+            padding: 20px;
+            height: auto;
+            min-height: 100vh;
+            align-items: flex-start;
+            /* Start from top on mobile */
+            padding-top: 10vh;
+        }
+
+        .form-side {
+            margin-left: 0 !important;
+            /* Remove the -300px offset */
+            padding: 40px 25px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 2. Scale Typography */
+        .form-side h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .form-side p {
+            font-size: 0.85rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* 3. Adjust Hero Background for Mobile */
+        .hero-header {
+            height: 25vh;
+            /* Adjust gradient for better readability on small screens */
+            background: linear-gradient(rgba(255, 255, 255, 0.4), var(--bg-body)),
+                url('https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg');
+            background-size: cover;
+        }
+
+        /* 4. Optimize Touch Targets */
+        .btn-action {
+            padding: 18px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            /* Slightly tighter for narrow screens */
+        }
+
+        .status-icon {
+            margin-bottom: 25px;
+        }
+    }
+
+    /* Small Phone Fix (iPhone SE sizes) */
+    @media (max-width: 380px) {
+        .form-side h1 {
+            font-size: 1.5rem;
+        }
+
+        .form-side {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<div class="hero-header"></div>
+
+<div class="premium-wrapper">
+    <div class="form-side">
+        <div class="status-icon">✓</div>
+
+        <h1>Security Verification</h1>
+
+        <p>Elevated privileges required. Enter your administrative credentials to authorize the permanent removal of
+            today's records.</p>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert-premium">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-wrapper">
+                <input type="password" name="password" placeholder="HR PASSWORD" required>
+            </div>
+            <button type="submit" class="btn-action">Authorize Action</button>
+        </form>
+
+        <a href="{% url 'attendance' %}" class="back-nav">Return to Dashboard</a>
+    </div>
+</div>
+
+{% endblock %}

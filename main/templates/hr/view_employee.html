@@ -1,0 +1,281 @@
+{% extends 'hr/base.html' %}
+{% block content %}
+
+<style>
+    .directory-body {
+        background-color: #f4f7f6;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding-bottom: 50px;
+    }
+
+    /* Hero Header Section */
+    .hero-banner {
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+            url('https://images.pexels.com/photos/3778622/pexels-photo-3778622.jpeg');
+        background-size: cover;
+        background-position: center;
+        height: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .hero-banner h1 {
+        font-size: 2.8rem;
+        margin: 0;
+        font-family: serif;
+        /* Matches the "Project Manager" font style */
+    }
+
+    .hero-banner p {
+        letter-spacing: 3px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-top: 5px;
+        text-transform: uppercase;
+    }
+
+    /* Layout Wrapper */
+    .container-wrapper {
+        max-width: 1100px;
+        margin: -40px auto 0 auto;
+        padding: 0 20px;
+    }
+
+    .back-link {
+        color: #333;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+
+    /* Employee Card Row */
+    .employee-card {
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 25px;
+        margin-bottom: 12px;
+        border-radius: 3px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .emp-profile-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 35%;
+    }
+
+    .emp-img {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .emp-img-placeholder {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: #eceff1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #90a4ae;
+    }
+
+    .emp-text h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #222;
+    }
+
+    .emp-text span {
+        font-size: 0.75rem;
+        color: #999;
+        display: block;
+    }
+
+    .emp-role-type {
+        color: #666;
+        font-size: 0.9rem;
+        width: 20%;
+    }
+
+    /* Buttons - Teal Style from Image */
+    .btn-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-action {
+        background-color: #007a7a;
+        /* Teal from the image */
+        color: white;
+        padding: 10px 18px;
+        border-radius: 3px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .btn-action:hover {
+        background-color: #005a5a;
+        color: white;
+    }
+
+    .btn-edit {
+        background-color: #546e7a;
+    }
+
+    .btn-delete {
+        background-color: #b71c1c;
+    }
+
+    .role-header {
+        margin: 40px 0 15px 0;
+        font-size: 1.2rem;
+        color: #444;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .hero-banner {
+            height: 180px;
+        }
+
+        .hero-banner h1 {
+            font-size: 2rem;
+        }
+
+        .container-wrapper {
+            margin-top: -20px;
+            padding: 0 15px;
+        }
+
+        .employee-card {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        .emp-profile-section {
+            width: 100%;
+        }
+
+        .emp-role-type {
+            width: 100%;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .btn-group {
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            flex: 1;
+            /* Buttons grow to fill width */
+            text-align: center;
+            padding: 12px 5px;
+            font-size: 0.7rem;
+        }
+
+        .btn-delete {
+            flex-basis: 100%;
+            /* Optional: Puts delete on its own line for safety */
+            margin-top: 5px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-banner h1 {
+            font-size: 1.6rem;
+        }
+
+        .emp-text h4 {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="directory-body">
+
+    <div class="hero-banner">
+        <h1>Team Directory</h1>
+      
+    </div>
+
+    <div class="container-wrapper">
+        <a href="#" class="back-link"></a>
+
+        {% for role, employees in role_data.items %}
+        <h3 class="role-header">{{ role.name }}</h3>
+
+        {% if employees %}
+        {% for emp in employees %}
+        <div class="employee-card">
+
+            <div class="emp-profile-section">
+                {% if emp.photo %}
+                <img src="{{ emp.photo.url }}" class="emp-img" alt="Profile">
+                {% else %}
+                <div class="emp-img-placeholder">{{ emp.name|slice:":1" }}</div>
+                {% endif %}
+
+                <div class="emp-text">
+                    <h4>{{ emp.name }}</h4>
+                    <span>REFERENCE #{{ emp.employee_id }}</span>
+                </div>
+            </div>
+
+            <div class="emp-role-type">
+                {{ emp.employment_type|default:"Full Time" }}
+            </div>
+
+            <div class="btn-group">
+                <a href="{% url 'employee_detail' emp.id %}" class="btn-action">
+                    View Details
+                </a>
+
+                <a href="{% url 'update_employee' emp.id %}" class="btn-action btn-edit">
+                    Edit
+                </a>
+
+                <a href="{% url 'delete_employee' emp.id %}" class="btn-action btn-delete"
+                    onclick="return confirm('Are you sure you want to delete {{ emp.name }}?');">
+                    Delete
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="employee-card">
+            <p style="margin:0; color:#999;">No Employees in this Role.</p>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

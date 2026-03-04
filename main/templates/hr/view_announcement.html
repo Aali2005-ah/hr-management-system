@@ -1,0 +1,295 @@
+{% extends 'hr/base.html' %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@1,700&family=Inter:wght@400;600&display=swap"
+    rel="stylesheet">
+
+<style>
+    .hero-header {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        width: 100%;
+        height: 30vh;
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+        background: #000;
+        z-index: 100;
+    }
+
+    .hero-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.8) 0%, rgba(31, 31, 31, 0.4) 50%, transparent 90%),
+            url('https://images.pexels.com/photos/3778622/pexels-photo-3778622.jpeg');
+        background-size: cover;
+        background-position: center;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        transform: scale(1.1);
+    }
+
+    .hero-header h1 {
+        position: relative;
+        z-index: 2;
+        color: #e7dbdb;
+        font-family: 'Bodoni Moda', serif;
+        font-size: 3rem;
+        font-style: italic;
+        margin: 0;
+        padding: 0 0 15px 40px;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .content-wrapper {
+        padding: 40px;
+        background: #f4f7f6;
+    }
+
+    .announcement-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 30px;
+    }
+
+    .announcement-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 280px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .announcement-card h3 {
+        font-family: 'Bodoni Moda', serif;
+        font-size: 2rem;
+        margin: 0 0 15px 0;
+        color: #1a202c;
+    }
+
+    .announcement-content {
+        color: #4a5568;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .card-meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #edf2f7;
+        margin-top: auto;
+    }
+
+    .posted-date {
+        font-size: 0.85rem;
+        color: #a0aec0;
+    }
+
+    .status-pill {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: #f8fafc;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-decoration: none;
+        text-transform: uppercase;
+        border: 1px solid #000;
+        transition: 0.2s;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    .btn-edit {
+        background: #000;
+        color: #fff;
+    }
+
+    .btn-delete {
+        color: #e53e3e;
+        border-color: #e53e3e;
+        background: transparent;
+    }
+
+    .btn-delete:hover {
+        background: #e53e3e;
+        color: #fff;
+    }
+
+    /* Full Screen Overlay Styling */
+    .fullscreen-confirm {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 9999;
+        display: none; /* Controlled by JS */
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+    }
+
+    .confirm-modal-content {
+        background: white;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        max-width: 400px;
+        width: 90%;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .hero-header {
+            height: 18vh;
+        }
+
+        .hero-header h1 {
+            font-size: 2rem;
+            padding: 0 0 15px 20px;
+        }
+
+        .content-wrapper {
+            padding: 20px 15px; /* Less padding on small screens */
+        }
+
+        .announcement-grid {
+            /* Switch from minmax(380px) to a single column */
+            grid-template-columns: 1fr; 
+            gap: 20px;
+        }
+
+        .announcement-card {
+            padding: 20px;
+            min-height: auto; /* Let content dictate height */
+        }
+
+        .announcement-card h3 {
+            font-size: 1.5rem;
+        }
+
+        .card-actions {
+            flex-direction: column; /* Stack Edit and Delete buttons */
+        }
+
+        .btn {
+            text-align: center;
+            width: 100%; /* Make buttons easy to tap with thumbs */
+            box-sizing: border-box;
+        }
+
+        .confirm-modal-content {
+            padding: 20px 10px;
+            width: 80%;
+        }
+    }
+
+    /* Extra small screens fix for long titles */
+    @media (max-width: 480px) {
+        .hero-header h1 {
+            font-size: 1.4rem;
+            line-height: 1.2;
+        }
+        
+        .card-meta-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+    }
+</style>
+
+<div class="hero-header">
+    <h1>Latest Updates</h1>
+</div>
+
+<div class="content-wrapper">
+    <div class="announcement-grid">
+        {% for a in announcements %}
+        <div class="announcement-card">
+            <div>
+                <h3>{{ a.title }}</h3>
+                <div class="announcement-content">
+                    {{ a.content|truncatewords:40 }}
+                </div>
+            </div>
+
+            <div>
+                <div class="card-meta-row">
+                    <span class="posted-date">Posted on {{ a.created_at|date:"M d, Y" }}</span>
+                    <div class="status-pill">
+                        {% if a.permanent %}
+                        <span style="color: #636e72;">Permanent</span>
+                        {% elif a.display_until < now %} 
+                        <span style="color: #e53e3e;">Expired</span>
+                        {% else %}
+                        <span style="color: #27ae60;">Active</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card-actions" id="actions-{{ a.id }}">
+                    <a href="{% url 'edit_announcement' a.id %}" class="btn btn-edit">Edit</a>
+                    <button type="button" class="btn btn-delete" onclick="toggleConfirm('{{ a.id }}', true)">Delete</button>
+                </div>
+
+                <div class="fullscreen-confirm" id="confirm-{{ a.id }}">
+                    <div class="confirm-modal-content">
+                        <h2 style="font-family: 'Bodoni Moda', serif; margin-bottom: 10px;">Are you sure?</h2>
+                        <p style="font-family: 'Inter', sans-serif; color: #4a5568; margin-bottom: 25px;">This announcement will be permanently removed.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <a href="{% url 'delete_announcement' a.id %}" class="btn"
+                                style="background: #e53e3e; color: #fff; border-color: #e53e3e; border-radius: 10px;">Yes, Delete</a>
+                            <button type="button" class="btn" style="color: #4a5568; border-color: #cbd5e0; border-radius: 10px;"
+                                onclick="toggleConfirm('{{ a.id }}', false)">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function toggleConfirm(id, show) {
+        const confirmOverlay = document.getElementById('confirm-' + id);
+        if (show) {
+            confirmOverlay.style.display = 'flex';
+            // Prevent scrolling of background while modal is open
+            document.body.style.overflow = 'hidden';
+        } else {
+            confirmOverlay.style.display = 'none';
+            // Restore scrolling
+            document.body.style.overflow = 'auto';
+        }
+    }
+</script>
+{% endblock %}

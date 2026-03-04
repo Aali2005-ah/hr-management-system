@@ -1,0 +1,368 @@
+{% extends 'hr/base.html' %}
+
+{% block title %} Job Role Summary {% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #1e272e;
+        --accent: #0984e3;
+        --bg-soft: #f4f7f6;
+        --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --text-dark: #2d3436;
+        --text-light: #636e72;
+        --border-color: #dfe6e9;
+        
+        --font-heading: 'Playfair Display', serif;
+        --font-ui: 'Montserrat', sans-serif;
+        --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+        background-color: var(--bg-soft);
+        margin: 0;
+        font-family: var(--font-body);
+    }
+
+    /* Fixed Header with clear overlay */
+    .header-section {
+        position: fixed;
+        top: 0;
+        left: 250px; /* Sidebar width adjustment */
+        right: 0;
+        height: 200px;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 5%;
+        color: white;
+        background: url('https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg') no-repeat center center;
+        background-size: cover;
+    }
+
+    .header-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+        z-index: 1;
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .header-section h2 {
+        margin: 0;
+        font-family: var(--font-heading);
+        font-size: 2.8rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .header-description {
+        font-family: var(--font-ui);
+        font-size: 1rem;
+        color: rgba(255,255,255,0.8);
+        margin-top: 8px;
+    }
+
+    /* Page Layout */
+    .page-container {
+        padding-top: 240px;
+        padding-bottom: 50px;
+        max-width: 1400px;
+        margin: auto;
+        padding-left: 30px;
+        padding-right: 20px;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        gap: 25px;
+    }
+
+    /* Clean Card Design */
+    .role-card {
+        background: #ffffff;
+        border-radius: 6px;
+        display: flex;
+        align-items: stretch;
+        height: 140px;
+        box-shadow: var(--card-shadow);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        border: 1px solid transparent;
+        overflow: hidden;
+    }
+
+    .role-card:hover {
+        transform: translateY(-5px);
+        border-color: teal;
+    }
+
+    .card-image-wrapper {
+        width: 140px;
+        min-width: 140px;
+    }
+
+    .card-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-details {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 25px;
+    }
+
+    .role-main {
+        flex-grow: 1;
+    }
+
+    .role-main h3 {
+        margin: 0 0 12px 0;
+        font-family: var(--font-ui);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    /* Separated Stats Section */
+    .stats-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .stat-block {
+        padding: 0 15px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--border-color);
+    }
+
+    .stat-block:first-child { padding-left: 0; }
+    .stat-block:last-child { border-right: none; }
+
+    .stat-label {
+        font-size: 0.65rem;
+        color: var(--text-light);
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .stat-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .total-value {
+        color: var(--accent);
+        font-weight: 800;
+    }
+
+    /* Clean View Link */
+    .btn-view {
+        font-family: var(--font-ui);
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--accent);
+        text-decoration: none;
+        padding: 10px;
+        margin-left: 10px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-view:hover {
+        opacity: 0.7;
+        transform: translateX(3px);
+    }
+
+    /* --- MOBILE & TABLET RESPONSIVE OVERRIDES --- */
+
+    /* 1. Tablet and Small Desktop: Remove Sidebar Offset */
+    @media (max-width: 1200px) {
+        .header-section { 
+            left: 0; 
+            padding: 0 5%; 
+        }
+        .page-container {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+
+    /* 2. Mobile Landscape/Large Phones: Adjust Grid */
+    @media (max-width: 992px) {
+        .grid-container { 
+            grid-template-columns: 1fr; /* Single column earlier for readability */
+        }
+    }
+
+    /* 3. Mobile Portrait: Full Transformation */
+    @media (max-width: 768px) {
+        .header-section { 
+            top: 50px;
+            height: 150px; 
+        }
+        
+        .header-section h2 { 
+            font-size: 1.8rem; 
+            text-align: center;
+        }
+        
+        .header-description {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .page-container { 
+            padding-top: 180px; /* Adjusted for smaller header */
+        }
+
+        /* Transform Card to Vertical Layout */
+        .role-card { 
+            height: auto; 
+            flex-direction: column; 
+            border-radius: 12px; /* More rounded on mobile */
+        }
+
+        .card-image-wrapper { 
+            width: 100%; 
+            height: 160px; /* Fixed height for the top image */
+            min-width: 100%;
+        }
+
+        .card-details { 
+            flex-direction: column; 
+            padding: 20px; 
+            align-items: flex-start; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .role-main {
+            width: 100%;
+        }
+
+        .role-main h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        /* Stats: 2x2 Grid or Row-Wrap for Mobile */
+        .stats-container { 
+            width: 100%; 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two stats per row */
+            gap: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .stat-block { 
+            padding: 0; 
+            border: none; /* Remove vertical separators */
+        }
+
+        /* Align Button to Bottom Right */
+        .btn-view { 
+            align-self: flex-end; 
+            margin-top: 20px; 
+            padding: 10px 0;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* 4. Very Small Screens */
+    @media (max-width: 480px) {
+        .header-section h2 { font-size: 1.5rem; }
+        .stats-container { gap: 10px; }
+        .stat-value { font-size: 0.9rem; }
+    }
+</style>
+
+<div class="page-container">
+    <div class="header-section">
+        <div class="header-content">
+            <h2>Job Role Summary</h2>
+            <div class="header-description">Comprehensive workforce distribution analytics.</div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        {% for item in summary_data %}
+        <div class="role-card">
+            <div class="card-image-wrapper">
+                {% with r=item.role|lower %}
+                    {% if "software developer" in r or "software engineer" in r %}
+                        <img src="https://images.pexels.com/photos/16129705/pexels-photo-16129705.jpeg" alt="Software">
+                    {% elif "data" in r %}
+                        <img src="https://images.pexels.com/photos/7580704/pexels-photo-7580704.jpeg" alt="Data">
+                    {% elif "hr executive" in r %}
+                        <img src="https://images.pexels.com/photos/7643735/pexels-photo-7643735.jpeg" alt="HR">
+                    {% elif "marketing manager" in r %}
+                        <img src="https://images.pexels.com/photos/6772103/pexels-photo-6772103.jpeg" alt="Marketing">
+                    {% elif "accountant" in r %}
+                        <img src="https://images.pexels.com/photos/6266674/pexels-photo-6266674.jpeg" alt="Accountant">
+                    {% elif "ui/ux designer" in r %}
+                        <img src="https://images.pexels.com/photos/2777898/pexels-photo-2777898.jpeg" alt="Designer">
+                    {% elif "backend" in r %}
+                        <img src="https://images.pexels.com/photos/1181243/pexels-photo-1181243.jpeg" alt="Backend">
+                    {% elif "frontend" in r %}
+                        <img src="https://images.pexels.com/photos/115655/pexels-photo-115655.jpeg" alt="Frontend">
+                    {% elif "project manager" in r %}
+                        <img src="https://images.pexels.com/photos/5324975/pexels-photo-5324975.jpeg" alt="PM">
+                    {% elif "business analyst" in r %}
+                        <img src="https://images.pexels.com/photos/3183131/pexels-photo-3183131.jpeg" alt="BA">
+                    {% else %}
+                        <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg" alt="Default">
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <div class="card-details">
+                <div class="role-main">
+                    <h3>{{ item.role }}</h3>
+                    <div class="stats-container">
+                        <div class="stat-block">
+                            <span class="stat-label">Total</span>
+                            <span class="stat-value total-value">{{ item.total }}</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Full Time</span>
+                            <span class="stat-value">{{ item.full_time }}</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Part Time</span>
+                            <span class="stat-value">{{ item.part_time }}</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Interns</span>
+                            <span class="stat-value">{{ item.interns }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'view_role_employees' item.role.id %}" class="btn-view">
+                    VIEW &rarr;
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

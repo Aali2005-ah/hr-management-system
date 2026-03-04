@@ -1,0 +1,355 @@
+{% extends 'hr/base.html' %}
+{% block content %}
+
+<style>
+    :root {
+        --accent-teal: #008080;
+        --dark-charcoal: #1a1a1a;
+        --soft-gray: #f9f9f9;
+        --border-color: #e0e0e0;
+        --text-main: #333;
+    }
+
+    .employee-page-wrapper {
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        font-family: 'Inter', sans-serif;
+        animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap');
+
+    .hero-header {
+        width: 100%;
+        height: 25vh;
+        background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(31,31,31,0.4) 50%, transparent 90%),
+            url('https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .hero-header h1 {
+        color: #e7dbdb;
+        font-family: 'Playfair Display', serif;
+        font-weight: 900;
+        font-size: 3rem;
+        text-transform: uppercase;
+        margin: 0;
+        padding: 0 0 20px 40px;
+    }
+
+    .form-content-area {
+        max-width: 1100px;
+        width: 95%;
+        margin: 40px auto 0;
+        background: white;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 35px;
+        max-height: 70vh;
+    }
+
+    .photo-section {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .profile-placeholder {
+        width: 100%;
+        aspect-ratio: 1/1;
+        background: #fdfdfd;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .profile-placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .upload-trigger {
+        width: 100%;
+        background: var(--dark-charcoal);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    #photo-input { display: none; }
+
+    .input-content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 40px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #666;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 6px 0;
+        border: none;
+        border-bottom: 2px solid var(--border-color);
+        background: transparent;
+        font-size: 14px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-bottom-color: var(--accent-teal);
+    }
+
+    .error { border-bottom-color: #ef4444 !important; }
+
+    .error-text {
+        color: #ef4444;
+        font-size: 10px;
+        margin-top: 4px;
+        font-weight: 600;
+    }
+
+    .full-width { grid-column: span 2; }
+
+    .action-row {
+        margin-top: 15px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .save-btn {
+        flex: 2;
+        background: var(--dark-charcoal);
+        color: white;
+        padding: 14px;
+        border: none;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .save-btn:hover { background: var(--accent-teal); }
+
+    .cancel-btn {
+        flex: 1;
+        background: #f1f1f1;
+        padding: 14px;
+        text-align: center;
+        text-decoration: none;
+        color: #666;
+        font-size: 11px;
+        font-weight: 900;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Update the base wrapper to allow scrolling on mobile */
+@media (max-width: 768px) {
+    .employee-page-wrapper { 
+        height: auto; 
+        overflow-y: auto; 
+    }
+
+    .hero-header {
+        height: 15vh;
+    }
+
+    .hero-header h1 {
+        font-size: 1.8rem;
+        padding: 0 0 15px 20px;
+    }
+
+    .form-content-area {
+        grid-template-columns: 1fr; /* Stack photo and form */
+        margin-top: 20px;
+        gap: 20px;
+        max-height: none;
+        padding: 15px;
+    }
+
+    /* Shrink the photo section for mobile */
+    .photo-section {
+        flex-direction: row; /* Align photo and button side-by-side */
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .profile-placeholder {
+        width: 80px; /* Reduced size */
+        border-radius: 50%; /* Circular look for mobile */
+    }
+
+    .upload-trigger {
+        width: auto;
+        padding: 8px 15px;
+        flex: 1;
+    }
+
+    /* Form Layout */
+    .input-content-grid { 
+        grid-template-columns: 1fr; 
+        gap: 15px;
+    }
+
+    .full-width { 
+        grid-column: span 1; 
+    }
+
+    .action-row { 
+        flex-direction: column; 
+        margin-top: 30px;
+        padding-bottom: 40px; /* Space at bottom */
+    }
+
+    .save-btn, .cancel-btn {
+        width: 100%;
+        padding: 16px; /* Larger tap target */
+    }
+}
+</style>
+
+<div class="employee-page-wrapper">
+    <header class="hero-header">
+        <h1>Update Employee</h1>
+    </header>
+
+    <form method="POST" enctype="multipart/form-data" class="form-content-area">
+        {% csrf_token %}
+
+        <!-- Photo Section -->
+        <div class="photo-section">
+            <div class="profile-placeholder">
+                {% if employee.photo %}
+                    <img src="{{ employee.photo.url }}" id="img-preview">
+                {% else %}
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" id="img-preview">
+                {% endif %}
+            </div>
+
+            <label for="photo-input" class="upload-trigger">Change Photo</label>
+            <input type="file" name="photo" id="photo-input" accept="image/*" onchange="previewPhoto(this)">
+        </div>
+
+        <!-- Form Section -->
+        <div>
+
+            <div class="input-content-grid">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" value="{{ form_data.name|default:'' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="place" value="{{ form_data.place|default:'' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ form_data.email|default:'' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" name="phone" value="{{ form_data.phone|default:'' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" name="dob" value="{{ form_data.dob|default:'' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Joining Date</label>
+                    <input type="date" name="joining" value="{{ form_data.joining|default:'' }}" required>
+                </div>
+
+                <!-- FIXED DESIGNATION SELECT -->
+                <div class="form-group">
+                    <label>Designation</label>
+                    <select name="job_role" required>
+                        <option value="" disabled {% if not form_data.job_role %}selected{% endif %}>Select Role</option>
+                        {% for role in roles %}
+                            <option value="{{ role.id }}" {% if form_data.job_role|stringformat:"s" == role.id|stringformat:"s" %}selected{% endif %}>
+                                {{ role.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Employment Type</label>
+                    <select name="mode" required>
+                        <option value="">Select Mode</option>
+                        <option value="Intern" {% if form_data.mode == 'Intern' %}selected{% endif %}>Intern</option>
+                        <option value="Part Time" {% if form_data.mode == 'Part Time' %}selected{% endif %}>Part Time</option>
+                        <option value="Full Time" {% if form_data.mode == 'Full Time' %}selected{% endif %}>Full Time</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Annual Salary</label>
+                    <input type="number" name="salary" value="{{ form_data.salary|default:'' }}" required>
+                </div>
+
+            </div>
+
+            <div class="action-row">
+                <button type="submit" class="save-btn">Update Profile</button>
+                <a href="{% url 'employee_detail' employee.id %}" class="cancel-btn">Cancel</a>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<script>
+function previewPhoto(input) {
+    const preview = document.getElementById('img-preview');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
+{% endblock %}
