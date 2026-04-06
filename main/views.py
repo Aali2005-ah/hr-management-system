@@ -105,7 +105,7 @@ def hr_logout(request):
 from django.db.models import Sum, Count
 from django.utils.timezone import now
 from datetime import timedelta
-
+@login_required
 def dashboard(request):
 
     today = now().date()
@@ -481,12 +481,11 @@ def update_employee(request, id):
         if not form_data['job_role']:
             error_messages['job_role'] = 'Job role is required'
         
-        # Date validation - check if dates are provided and valid
+        # Date validation
         if not form_data['dob']:
             error_messages['dob'] = 'Date of birth is required'
         else:
             try:
-                # Validate date format
                 datetime.strptime(form_data['dob'], '%Y-%m-%d')
             except ValueError:
                 error_messages['dob'] = 'Invalid date format for Date of Birth'
@@ -495,7 +494,6 @@ def update_employee(request, id):
             error_messages['joining'] = 'Joining date is required'
         else:
             try:
-                # Validate date format
                 datetime.strptime(form_data['joining'], '%Y-%m-%d')
             except ValueError:
                 error_messages['joining'] = 'Invalid date format for Joining Date'
@@ -514,7 +512,7 @@ def update_employee(request, id):
                 employee.place = form_data['place']
                 employee.mode_of_work = form_data['mode']
                 
-                # Set dates only if they're provided
+                # Set dates
                 if form_data['dob']:
                     employee.dob = form_data['dob']
                 if form_data['joining']:
@@ -522,9 +520,15 @@ def update_employee(request, id):
                 
                 employee.salary = form_data['salary']
                 
-                role_id = form_data['job_role']
-                employee.job_role = JobRole.objects.get(id=role_id)
+                # Get job role
+                try:
+                    role_id = int(form_data['job_role'])
+                    employee.job_role = JobRole.objects.get(id=role_id)
+                except (ValueError, JobRole.DoesNotExist):
+                    error_messages['job_role'] = 'Invalid job role selected'
+                    raise Exception("Invalid job role")
                 
+                # Handle photo upload
                 if request.FILES.get("photo"):
                     # Delete old photo if it exists
                     if employee.photo:
@@ -538,12 +542,27 @@ def update_employee(request, id):
                     extra_tags='update_employee'
                 )
                 return redirect("view_employee")
+                
             except Exception as e:
                 messages.error(
                     request, 
                     f'Error updating employee: {str(e)}',
                     extra_tags='update_employee'
                 )
+                # Stay on the same page with form data
+                return render(request, "hr/update_employee.html", {
+                    "employee": employee,
+                    "roles": roles,
+                    "error_messages": error_messages,
+                    "form_data": form_data
+                })
+        else:
+            # If there are validation errors, stay on the same page
+            messages.error(
+                request, 
+                'Please correct the errors below.',
+                extra_tags='update_employee'
+            )
     
     # For GET request, populate form_data with employee data
     else:
@@ -553,7 +572,7 @@ def update_employee(request, id):
             'email': employee.email,
             'place': employee.place,
             'mode': employee.mode_of_work,
-            'job_role': employee.job_role_id,
+            'job_role': employee.job_role_id if employee.job_role else '',
             'dob': employee.dob.strftime('%Y-%m-%d') if employee.dob else '',
             'joining': employee.joining_date.strftime('%Y-%m-%d') if employee.joining_date else '',
             'salary': employee.salary,
